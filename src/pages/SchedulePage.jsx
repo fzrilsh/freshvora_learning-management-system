@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from "react";
+import { ScheduleItemSkeleton } from '../components/widgets/SectionSkeletons';
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -161,6 +162,11 @@ function SchedulePage() {
   const [calendarDate, setCalendarDate] = useState(today);
   const [selectedDate, setSelectedDate] = useState(today);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   // List for selected date
   const selectedList = scheduleCalendarData.filter((item) =>
@@ -270,100 +276,102 @@ function SchedulePage() {
               {format(selectedDate, "EEEE, MMMM d, yyyy")}
             </Typography>
             <Stack spacing={2}>
-              {selectedList.map((item) => (
-                <Card
-                  key={item.id}
-                  sx={{
-                    borderRadius: 3,
-                    boxShadow: 2,
-                    width: "100%",
-                    cursor: "pointer",
-                    ":hover": { boxShadow: 6 },
-                  }}
-                >
-                  <CardContent
-                    sx={{ display: "flex", flexDirection: "column" }}
-                  >
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      justifyContent={"space-between"}
-                      mb={0}
+              {loading
+                ? Array.from({ length: 3 }).map((_, i) => <ScheduleItemSkeleton key={i} />)
+                : selectedList.map((item) => (
+                    <Card
+                      key={item.id}
+                      sx={{
+                        borderRadius: 3,
+                        boxShadow: 2,
+                        width: "100%",
+                        cursor: "pointer",
+                        ":hover": { boxShadow: 6 },
+                      }}
                     >
-                      <Typography
-                        variant="body2"
-                        color="text"
-                        sx={{ fontWeight: 600 }}
+                      <CardContent
+                        sx={{ display: "flex", flexDirection: "column" }}
                       >
-                        {item.classCode}
-                      </Typography>
-                      <Chip
-                        label={item.type}
-                        color={
-                          item.type === "Online Class" ? "success" : "primary"
-                        }
-                        variant="outlined"
-                        sx={{
-                          borderColor: theme.palette.success.main,
-                          color: theme.palette.success.main,
-                          bgcolor: "transparent",
-                          fontWeight: 600,
-                        }}
-                        size="small"
-                      />
-                    </Stack>
-                    <Typography
-                      variant="subtitile1"
-                      fontWeight={400}
-                      sx={{ mb: 1 }}
-                    >
-                      {item.program}
-                    </Typography>
-                    {/* Info rows, matching OngoingClass layout */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        mb: 0.5,
-                      }}
-                    >
-                      <ScheduleIcon sx={{ fontSize: 16, color: "#666" }} />
-                      <Typography variant="body2" color="text.secondary">
-                        {item.schedule} GMT+7
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        mb: 0.5,
-                      }}
-                    >
-                      <PlaceIcon sx={{ fontSize: 16, color: "#666" }} />
-                      <Typography variant="body2" color="text.secondary">
-                        {item.type === "Online Class"
-                          ? "Zoom Meeting"
-                          : item.location}
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        mb: 0.5,
-                      }}
-                    >
-                      <SessionIcon sx={{ fontSize: 16, color: "#666" }} />
-                      <Typography variant="body2" color="text.secondary">
-                        Session {item.session}
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                </Card>
-              ))}
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent={"space-between"}
+                          mb={0}
+                        >
+                          <Typography
+                            variant="body2"
+                            color="text"
+                            sx={{ fontWeight: 600 }}
+                          >
+                            {item.classCode}
+                          </Typography>
+                          <Chip
+                            label={item.type}
+                            color={
+                              item.type === "Online Class" ? "success" : "primary"
+                            }
+                            variant="outlined"
+                            sx={{
+                              borderColor: theme.palette.success.main,
+                              color: theme.palette.success.main,
+                              bgcolor: "transparent",
+                              fontWeight: 600,
+                            }}
+                            size="small"
+                          />
+                        </Stack>
+                        <Typography
+                          variant="subtitile1"
+                          fontWeight={400}
+                          sx={{ mb: 1 }}
+                        >
+                          {item.program}
+                        </Typography>
+                        {/* Info rows, matching OngoingClass layout */}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            mb: 0.5,
+                          }}
+                        >
+                          <ScheduleIcon sx={{ fontSize: 16, color: "#666" }} />
+                          <Typography variant="body2" color="text.secondary">
+                            {item.schedule} GMT+7
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            mb: 0.5,
+                          }}
+                        >
+                          <PlaceIcon sx={{ fontSize: 16, color: "#666" }} />
+                          <Typography variant="body2" color="text.secondary">
+                            {item.type === "Online Class"
+                              ? "Zoom Meeting"
+                              : item.location}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            mb: 0.5,
+                          }}
+                        >
+                          <SessionIcon sx={{ fontSize: 16, color: "#666" }} />
+                          <Typography variant="body2" color="text.secondary">
+                            Session {item.session}
+                          </Typography>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  ))}
               {selectedList.length === 0 && (
                 <Typography
                   color="text.secondary"
