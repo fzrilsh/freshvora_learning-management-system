@@ -43,6 +43,7 @@ import {
   Place as PlaceIcon,
   Bookmarks as SessionIcon,
 } from "@mui/icons-material";
+import Footer from "../components/Footer";
 
 // Move MonthContainer outside component for correct theme access
 const MonthContainer = styled(Box)(({ theme }) => ({
@@ -161,31 +162,21 @@ function SchedulePage() {
   const [selectedDate, setSelectedDate] = useState(today);
   const [pickerOpen, setPickerOpen] = useState(false);
 
-  // Get all unique dates with classes in the current month
-  const monthStart = startOfMonth(calendarDate);
-  const monthEnd = endOfMonth(calendarDate);
-  const monthSchedules = scheduleCalendarData.filter((item) => {
-    const d = parseISO(item.date);
-    return isWithinInterval(d, { start: monthStart, end: monthEnd });
-  });
-
-  // Group by date for the list
-  const grouped = useMemo(() => {
-    const map = {};
-    monthSchedules.forEach((item) => {
-      if (!map[item.date]) map[item.date] = [];
-      map[item.date].push(item);
-    });
-    return map;
-  }, [calendarDate]);
-
   // List for selected date
   const selectedList = scheduleCalendarData.filter((item) =>
     isSameDay(parseISO(item.date), selectedDate)
   );
 
-  const handlePrevMonth = () => setCalendarDate(subMonths(calendarDate, 1));
-  const handleNextMonth = () => setCalendarDate(addMonths(calendarDate, 1));
+  const handlePrevMonth = () => {
+    const firstDay = subMonths(calendarDate, 1);
+    setCalendarDate(firstDay);
+    setSelectedDate(firstDay);
+  }
+  const handleNextMonth = () => {
+    const firstDay = addMonths(calendarDate, 1);
+    setCalendarDate(firstDay);
+    setSelectedDate(firstDay);
+  }
   const handleToday = () => {
     setCalendarDate(today);
     setSelectedDate(today);
@@ -386,6 +377,7 @@ function SchedulePage() {
           </Grid>
         </Grid>
       </Box>
+      <Footer />
     </LocalizationProvider>
   );
 }
