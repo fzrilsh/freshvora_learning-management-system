@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://fzrilsh.github.io/freshvora-lms/",
+  "homepage": "https://fzrilsh.github.io/freshvora_learning-management-system/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
