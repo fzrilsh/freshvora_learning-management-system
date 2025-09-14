@@ -7,6 +7,7 @@ import Sidebar from "./Sidebar";
 import DashboardPage from "../pages/DashboardPage";
 import ProgramExplorerPage from "../pages/ProgramExplorerPage";
 import SchedulePage from "../pages/SchedulePage";
+import VoraSpacePage from "../pages/VoraSpacePage";
 
 const LayoutContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -90,7 +91,7 @@ const Layout = ({ onLogout }) => {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/program" element={<ProgramExplorerPage />} />
-            <Route path="/voraspace" element={<Box sx={{ p: 3, textAlign: 'center' }}><h2>VoraSpace</h2><p>This section is under development.</p></Box>} />
+            <Route path="/voraspace" element={<VoraSpacePage />} />
             <Route path="/assessment" element={<Box sx={{ p: 3, textAlign: 'center' }}><h2>Assessment</h2><p>This section is under development.</p></Box>} />
             <Route path="/portfolio" element={<Box sx={{ p: 3, textAlign: 'center' }}><h2>Portofolio</h2><p>This section is under development.</p></Box>} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
