@@ -35,7 +35,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18 # Gunakan versi Node yang sesuai dengan proyek Anda
+          node-version: 23 # Gunakan versi Node yang sesuai dengan proyek Anda
           cache: 'npm'
 
       # 3. Menginstall semua dependencies

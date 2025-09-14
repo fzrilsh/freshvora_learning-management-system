@@ -51,7 +51,7 @@ function AppRouter() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter>
+      <BrowserRouter basename="/freshvora_learning-management-system/">
         <Routes>
           {!isLoggedIn && (
             <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
