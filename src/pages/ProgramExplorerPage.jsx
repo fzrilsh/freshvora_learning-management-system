@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import { ProgramCardSkeleton, ProgramSearchSkeleton } from '../components/widgets/SectionSkeletons';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -40,6 +41,11 @@ function ProgramExplorerPage() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [tab, setTab] = useState(0); // 0: Free, 1: Paid
   const [filter, setFilter] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filteredPrograms = useMemo(() => {
     return programs.filter((p) => {
@@ -54,16 +60,18 @@ function ProgramExplorerPage() {
       <Typography variant="h4" fontWeight={700} color="primary" mb={3}>
         Program Explorer
       </Typography>
-      <Autocomplete
-        options={filterOptions}
-        value={filter}
-        onChange={(_, v) => setFilter(v)}
-        clearOnEscape
-        renderInput={(params) => (
-          <TextField {...params} label="Search for programs by interest or major" variant="outlined" />
-        )}
-        sx={{ mb: 3, maxWidth: 400 }}
-      />
+      {loading ? <ProgramSearchSkeleton /> : (
+        <Autocomplete
+          options={filterOptions}
+          value={filter}
+          onChange={(_, v) => setFilter(v)}
+          clearOnEscape
+          renderInput={(params) => (
+            <TextField {...params} label="Search for programs by interest or major" variant="outlined" />
+          )}
+          sx={{ mb: 3, maxWidth: 400 }}
+        />
+      )}
       <Tabs
         value={tab}
         onChange={(_, v) => setTab(v)}
@@ -75,54 +83,60 @@ function ProgramExplorerPage() {
         <Tab label="Paid Programs" />
       </Tabs>
       <Grid container spacing={3}>
-        {filteredPrograms.length === 0 ? (
-          <Grid item xs={12}>
-            <Typography color="text.secondary" align="center">
-              No programs found.
-            </Typography>
-          </Grid>
-        ) : (
-          filteredPrograms.map((program) => (
-            <Grid item xs={12} sm={6} md={4} key={program.id} display="flex" justifyContent="center">
-              <Card
-                sx={{
-                  width: 320,
-                  height: 380,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  borderRadius: 3,
-                  boxShadow: 2,
-                  flex: 'none',
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="160"
-                  image={program.image}
-                  alt={program.title}
-                  sx={{ objectFit: 'cover', width: '100%' }}
-                />
-                <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-                  <Typography variant="h6" fontWeight={600} gutterBottom noWrap>
-                    {program.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" mb={2} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
-                    {program.description}
-                  </Typography>
-                  <Stack direction="row" spacing={1} mb={2}>
-                    <Chip label={program.level} color="success" size="small" />
-                    <Chip label={program.category} color="primary" size="small" />
-                  </Stack>
-                  <Box mt="auto">
-                    <Button variant="contained" color="primary" fullWidth>
-                      View Details
-                    </Button>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))
-        )}
+        {loading
+          ? Array.from({ length: 3 }).map((_, i) => (
+              <Grid item xs={12} sm={6} md={4} key={i} display="flex" justifyContent="center">
+                <ProgramCardSkeleton />
+              </Grid>
+            ))
+          : filteredPrograms.length === 0 ? (
+              <Grid item xs={12}>
+                <Typography color="text.secondary" align="center">
+                  No programs found.
+                </Typography>
+              </Grid>
+            ) : (
+              filteredPrograms.map((program) => (
+                <Grid item xs={12} sm={6} md={4} key={program.id} display="flex" justifyContent="center">
+                  <Card
+                    sx={{
+                      width: 320,
+                      height: 380,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      borderRadius: 3,
+                      boxShadow: 2,
+                      flex: 'none',
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="160"
+                      image={program.image}
+                      alt={program.title}
+                      sx={{ objectFit: 'cover', width: '100%' }}
+                    />
+                    <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+                      <Typography variant="h6" fontWeight={600} gutterBottom noWrap>
+                        {program.title}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" mb={2} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                        {program.description}
+                      </Typography>
+                      <Stack direction="row" spacing={1} mb={2}>
+                        <Chip label={program.level} color="success" size="small" />
+                        <Chip label={program.category} color="primary" size="small" />
+                      </Stack>
+                      <Box mt="auto">
+                        <Button variant="contained" color="primary" fullWidth>
+                          View Details
+                        </Button>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))
+            )}
       </Grid>
       <Footer />
     </Box>
