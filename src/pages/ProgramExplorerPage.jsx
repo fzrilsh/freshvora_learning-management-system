@@ -18,6 +18,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const programs = [
   { id: 1, title: 'UI/UX Design Career Path', description: 'Learn to design beautiful and functional user interfaces from scratch.', category: 'UI/UX Design', type: 'Paid', level: 'Beginner', image: 'https://picsum.photos/400/200?random=1' },
@@ -37,6 +38,7 @@ const filterOptions = [
 ];
 
 function ProgramExplorerPage() {
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [tab, setTab] = useState(0); // 0: Free, 1: Paid
@@ -128,7 +130,7 @@ function ProgramExplorerPage() {
                         <Chip label={program.category} color="primary" size="small" />
                       </Stack>
                       <Box mt="auto">
-                        <Button variant="contained" color="primary" fullWidth>
+                        <Button variant="contained" color="primary" fullWidth onClick={() => navigate(`/course/${program.id}`)}>
                           View Details
                         </Button>
                       </Box>
