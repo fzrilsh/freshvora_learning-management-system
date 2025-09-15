@@ -8,6 +8,7 @@ import DashboardPage from "../pages/DashboardPage";
 import ProgramExplorerPage from "../pages/ProgramExplorerPage";
 import SchedulePage from "../pages/SchedulePage";
 import VoraSpacePage from "../pages/VoraSpacePage";
+import CoursePage from "../pages/CoursePage";
 
 const LayoutContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -41,16 +42,21 @@ const Layout = ({ onLogout }) => {
   const location = useLocation();
 
   // Sidebar menu item selection based on path
-  const pathToMenu = {
-    "/": "dashboard",
-    "/dashboard": "dashboard",
-    "/schedule": "schedule",
-    "/program": "program",
-    "/voraspace": "voraspace",
-    "/assessment": "assessment",
-    "/portfolio": "portfolio",
-  };
-  const selectedMenuItem = pathToMenu[location.pathname] || "dashboard";
+  let selectedMenuItem = "dashboard";
+  if (location.pathname.startsWith("/course/")) {
+    selectedMenuItem = "program";
+  } else {
+    const pathToMenu = {
+      "/": "dashboard",
+      "/dashboard": "dashboard",
+      "/schedule": "schedule",
+      "/program": "program",
+      "/voraspace": "voraspace",
+      "/assessment": "assessment",
+      "/portfolio": "portfolio",
+    };
+    selectedMenuItem = pathToMenu[location.pathname] || "dashboard";
+  }
 
   const handleMenuClick = () => {
     setSidebarOpen(!sidebarOpen);
@@ -92,6 +98,7 @@ const Layout = ({ onLogout }) => {
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/program" element={<ProgramExplorerPage />} />
             <Route path="/voraspace" element={<VoraSpacePage />} />
+            <Route path="/course/:id" element={<CoursePage />} />
             <Route path="/assessment" element={<Box sx={{ p: 3, textAlign: 'center' }}><h2>Assessment</h2><p>This section is under development.</p></Box>} />
             <Route path="/portfolio" element={<Box sx={{ p: 3, textAlign: 'center' }}><h2>Portofolio</h2><p>This section is under development.</p></Box>} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
